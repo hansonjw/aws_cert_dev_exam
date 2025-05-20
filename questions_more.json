@@ -1,0 +1,623 @@
+[
+    {
+        "question" : "You have an application running on an Amazon Elastic Compute Cloud (Amazon EC2) instance that needs read-only access to several AWS services. What is the best way to grant that application permissions only to a specific set of resources within your account?",
+        "answers" : [
+            "Configure Security Groups to allow the instance to work with the resources it should be able to access.",
+            "Launch the EC2 instance, log in, and use aws configure to authenticate as an IAM user with appropriate permissions.",
+            "Declare the necessary permissions as statements in the AWS SDK configuration file on the EC2 instance.",
+            "Launch the EC2 instance with an attached IAM role with custom IAM policies for the permissions."
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct. Create a custom IAM policy to configure permissions to a specific set of resources in your account. The ReadOnlyAccess IAM policy restricts write access but grants access to all resources within your account. Attaching this to an instance via a role (called attaching an instance profile) allows code running on the instance to access your resources without additional logins. Option A is incorrect because, while security groups may be necessary to open a network path to AWS resources like RDS instances, permissions are granted by IAM, not by security groups. Although feasible, option B is incorrect because AWS IAM roles provide a way to grant permissions directly to instances. Plus, using an IAM user means that any time you rotate credentials, you must update the EC2 host. Option C is incorrect because policies are not configured directly in the SDK."
+    },
+    {
+        "question" : "You have identified two Amazon Elastic Compute Cloud (EC2) instances in your account that appear to have the same private IP address. What could be the cause?",
+        "answers" : [
+            "These instances are in different Amazon Virtual Private Clouds (VPCs).",
+            "The instances are in different subnets.",
+            "The instances have different network ACLs.",
+            "The instances have different security groups."
+        ],
+        "correct" : "A",
+        "explanation" : "A. Option A is correct. Even though each instance in an Amazon VPC has a unique private IP address, you could assign the same private IP address ranges to multiple Amazon VPCs. Therefore, two instances in two different VPCs in your account could end up with the same private IP address. Options B, C, and D are incorrect because within the same VPC, there is no duplication of private IP addresses."
+    },
+    {
+        "question" : "Your company stores critical documents in Amazon Simple Storage Service (S3), but it wants to minimize cost. Most documents are used actively for only about one month and then used much less frequently after that. However, all data needs to be available within minutes when requested. How can you meet these requirements?",
+        "answers" : [
+            "Migrate the data to S3 Reduced Redundancy Storage (RRS) after 30 days.",
+            "Migrate the data to S3 Glacier after 30 days.",
+            "Migrate the data to S3 Standard - Infrequent Access (IA) after 30 days.",
+            "Turn on versioning and then migrate the older version to S3 Glacier."
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct—migrate the data to S3 Standard-IA after 30 days using a life cycle policy. The life cycle policy will automatically change the storage class for objects aged over 30 days. The Standard-IA storage class is for data that is accessed less frequently, but still requires rapid access when needed. It offers the same high durability, high throughput, and low latency of Standard, with a lower per-gigabyte storage price and per-gigabyte retrieval fee. Option A is incorrect because RRS provides a lower level of redundancy. The question did not state that the customer is willing to reduce the redundancy level of the data, and RRS does not replicate objects as many times as standard S3 storage. This storage option enables customers to store noncritical, reproducible data. Option B is incorrect because the fastest retrieval option for S3 Glacier is typically 3–5 hours. The customer requires retrieval in minutes. Option D is incorrect. Versioning will increase the number of files if new versions of files are being uploaded, which will increase cost. The question did not mention a need for multiple versions of files."   
+    },
+    {
+        "question" : "You are changing your application to take advantage of the elasticity and cost benefits provided by AWS Auto Scaling. To horizontally scale, you must no longer store users’ session state on your EC2 instances. Which of the following AWS Cloud services is best suited as an alternative for storing session state information?",
+        "answers" : [
+            "Amazon DynamoDB",
+            "Amazon Redshift",
+            "AWS Storage Gateway",
+            "Amazon Kinesis"
+        ],
+        "correct" : "A",
+        "explanation" : "A. Option A is correct. DynamoDB is a NoSQL database store that is a good alternative because of its scalability, high availability, and durability characteristics. Many platforms provide open source, drop-in replacement libraries that enable you to store native sessions in DynamoDB. DynamoDB is a suitable candidate for a session storage solution in a share-nothing, distributed architecture. Option B is incorrect; Redshift is a data warehouse. Option C is incorrect; although it is a storage option, Storage Gateway is designed to let you mount traditional NFS or CIFS filesystems backed by S3 buckets and requires an instance running as the mount point. DynamoDB, being fully serverless, is the better and cheaper option. Option D is incorrect because Kinesis is designed for streaming data events and is not a storage solution."   
+    },
+    {
+        "question" : "Your e-commerce application provides daily and ad hoc reporting to various business units on customer purchases. These operations result in a high level of read traffic to your MySQL Amazon Relational Database Service (RDS) instance. What can you do to scale up read traffic without impacting your database’s performance?",
+        "answers" : [
+            "Increase the allocated storage for the RDS instance.",
+            "Modify the RDS instance to be a multi-AZ deployment.",
+            "Create a read replica for an RDS instance.",
+            "Change the RDS instance to the DB engine version."
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct. RDS read replicas provide enhanced performance and durability for RDS instances. This replication feature makes it easy to scale out elastically beyond the capacity constraints of a single RDS instance for read-heavy database workloads. You can create one or more replicas of a given source RDS instance and serve high-volume application read traffic from multiple copies of your data, increasing aggregate read throughput. Option A is incorrect because increasing the database’s storage will not impact its performance or ability to serve read requests. Option B is incorrect because although a multi-AZ deployment does launch multiple instances, only one is the primary, and the secondary is for failover purposes only. It does not serve requests alongside the primary and therefore will not increase read throughput. Finally, Option D is incorrect because the choice of database engine, though an important one that should be tuned to your use case, is not as clear of a performance improvement as creating a read replica."   
+    },
+    {
+        "question" : "Your company has refactored their application to use NoSQL instead of SQL. They would like to use a managed service for running the new NoSQL database. Which AWS service should you recommend?",
+        "answers" : [
+            "Amazon Relational Database Service (Amazon RDS)",
+            "Amazon Elastic Compute Cloud (Amazon EC2)",
+            "Amazon DynamoDB",
+            "Amazon AppSync"
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct; DynamoDB is the best option. The question states a managed service, so this eliminates the EC2 service. Amazon RDS is a database product; AppSync manages GraphQL APIs. The company is looking for a NoSQL product, and DynamoDB is a managed NoSQL service. Option A, Relational Database Service, as its name implies, is for relational databases, not NoSQL. Option B is incorrect because EC2 is not a managed database service (though you can manually run your own databases on an EC2 instance). Option D is incorrect because AppSync is for launching serverless GraphQL APIs."   
+    },
+    {
+        "question" : "A company is currently using Amazon Relational Database Service (RDS); however, they are retiring a database that is currently running. They have automatic backups enabled on the database. They want to make sure that they retain the last backup before deleting the RDS database. As the lead developer on the project, what should you do?",
+        "answers" : [
+            "Delete the database. RDS automatic backups are already enabled.",
+            "Create a manual snapshot before deleting the database.",
+            "Use the AWS Database Migration Service (DMS) to back up the database.",
+            "SSH into the RDS database and perform a SQL dump."
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct; you must take a manual snapshot. Automatic backups do not retain the backup after the database is deleted. Therefore, option A is incorrect. Option C is incorrect. The AWS Database Migration Service is used to migrate databases from one source to another, which isn't what you are trying to accomplish here. Option D is incorrect because you cannot SSH into the Amazon RDS database, which is an AWS managed service."   
+    },
+    {
+        "question" : "You have an Amazon DynamoDB table that has a partition key and a sort key. However, a business analyst on your team wants to be able to query the DynamoDB table with a different partition key. What should you do?",
+        "answers" : [
+            "Create a local secondary index.",
+            "Create a global secondary index.",
+            "Create a new DynamoDB table."
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct. A global secondary index enables you to use a different partition key or primary key in addition to a different sort key. Option A is incorrect because a local secondary index can only have a different sort key. Option C is incorrect. A new DynamoDB table would not solve the issue. Option D is incorrect because it is possible to accomplish this."   
+    },
+    {
+        "question" : "An application is using Amazon DynamoDB. Recently, a developer on your team has noticed that occasionally the application does not return the most up-to-date data after a read from the database. How can you solve this issue?",
+        "answers" : [
+            "Advise the business analyst that this is not possible.",
+            "Increase the number of read capacity units (RCUs) for the table.",
+            "Increase the number of write capacity units (WCUs) for the table.",
+            "Refactor the application to use a SQL database."
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct. The application is configured to perform an eventually consistent read, which may not return the most up-to-date data. Option A is incorrect—increasing RCUs does not solve the underlying issue. Option B is incorrect because this is a read issue, not a write issue. Option C is incorrect. There is no need to refactor the entire application, because the issue is solvable."   
+    },
+    {
+        "question" : "Configure the application to perform a strongly consistent read.  A developer on your team would like to test a new idea and requires a NoSQL database. Your current applications are using Amazon DynamoDB. What should you recommend?",
+        "answers" : [
+            "Create a new table inside DynamoDB.",
+            "Use DynamoDB Local.",
+            "Use another NoSQL database on-premises.",
+            "Create an Amazon Elastic Compute Cloud (EC2) instance, and install a NoSQL database."
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct. DynamoDB Local is the downloadable version of DynamoDB that enables you to write and test applications without accessing the web service. Option A is incorrect. Although you can create a new table, there is a cost associated with this option, so it is not the best option. Option C is incorrect. Even though you can use another NoSQL database, your team is already using DynamoDB. This strategy would require them to learn a new database platform. Additionally, you would have to migrate the database to DynamoDB after development is done. Option D is incorrect for the same reasons as option C."   
+    },
+    {
+        "question" : "Amazon Elastic Block Store (EBS) volumes are encrypted by default.",
+        "answers" : [
+            "True",
+            "False"
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct. Encryption of Amazon EBS volumes is optional."   
+    },
+    {
+        "question" : "Which of the following is not part of the AWS Elastic Beanstalk functionality?",
+        "answers" : [
+            "Notify the account user of language runtime platform changes",
+            "Display events per environment",
+            "Show instance statuses per environment",
+            "Perform automatic changes to AWS Identity and Access Management (IAM) policies"
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct. Elastic Beanstalk cannot make automated changes to the policies attached to the service roles and instance roles. The capabilities mentioned in options A, B, and C are all part of the Beanstalk service."   
+    },
+    {
+        "question" : "What happens to AWS CodePipeline revisions that, upon reaching a manual approval gate, are rejected?",
+        "answers" : [
+            "The pipeline continues.",
+            "A notification is sent to the account administrator.",
+            "The revision is treated as failed.",
+            "The pipeline creates a revision clone and continues."
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct because if a revision does not pass a manual approval transition (either by expiring or by being rejected), it is treated as a failed revision. Successive revisions can then progress past this approval gate (if they are approved). Pipeline actions for a specific revision will not continue past a rejected approval gate, so option A is incorrect. A notification can be sent to an Amazon Simple Notification Service (SNS) topic that you specify when a revision reaches a manual approval gate, but no additional notification is sent if a change is rejected; therefore, option B is incorrect. Option D is incorrect, as AWS CodePipeline does not have a concept of “cloning” revisions."   
+    },
+    {
+        "question" : "You have an AWS CodeBuild task in your pipeline that requires large binary files that do not frequently change. What would be the best way to include these files in your build?",
+        "answers" : [
+            "Store the files in your source code repository. They will be passed in as part of the revision.",
+            "Store the files in an Amazon Simple Storage Service (S3) bucket and copy them during the build.",
+            "Create a custom build container that includes the files.",
+            "It is not possible to include files above a certain size."
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is the most appropriate choice, because you can update the build container any time you need to change the files. Option A is not recommended, because storing binary files in a Git-based repository incurs significant storage costs. Option B can work. However, you would have to pay additional data transfer costs any time a build is started. Option D is incorrect, as AWS CodeBuild does not limit the size of files that can be used."   
+    },
+    {
+        "question" : "When you update an AWS::S3::Bucket resource, what is the expected behavior if the Name property is updated?",
+        "answers" : [
+            "The resource is updated with no interruption.",
+            "The resource is updated with some interruption.",
+            "The resource is replaced.",
+            "The resource is deleted."
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct. Amazon S3 bucket names are globally unique and cannot be changed after a bucket is created. Thus, options A and B are incorrect. Option D is incorrect because the resource is not being deleted, only updated. Option C is correct because you must create a replacement bucket when changing this property in AWS CloudFormation."   
+    },
+    {
+        "question" : "What is the preferred method for updating resources created by AWS CloudFormation?",
+        "answers" : [
+            "Updating the resource directly in the AWS Management Console",
+            "Submitting an updated template to AWS CloudFormation to modify the stack",
+            "Updating the resource using the AWS Command Line Interface (CLI)",
+            "Updating the resource using an AWS Software Development Kit (SDK)"
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct because you can manage resources declared in a stack entirely within CloudFormation by performing stack updates. Manually updating the resource outside of CloudFormation (using the AWS Management Console, AWS CLI, or AWS SDK) will result in inconsistencies between the state expected by CloudFormation and the actual resource state. This can cause future stack operations to fail. Thus, options A, C, and D are incorrect."   
+    },
+    {
+        "question" : "You manage a sales tracking system in which point-of-sale devices send transactions of this form:{'date':'2017-01-30', 'amount':100.20, 'product_id': '1012', 'region':'WA', 'customer_id': '3382'} You need to generate two real-time reports. The first reports on the total sales per day for each customer. The second reports on the total sales per day for each product. Which AWS offerings and services can you use to generate these real-time reports?",
+        "answers" : [
+            "Ingest the data through Amazon Kinesis Data Streams. Use Amazon Kinesis Data Analytics to query for sales per day for each product and sales per day for each customer using SQL queries. Feed the result into two new streams in Amazon Kinesis Data Firehose.",
+            "Ingest the data through Kinesis Data Streams. Use Kinesis Data Firehose to query for sales per day for each product and sales per day for each customer with SQL queries. Feed the result into two new streams in Kinesis Data Firehose.",
+            "Ingest the data through Kinesis Data Analytics. Use Kinesis Data Streams to query for sales per day for each product and sales per day for each customer with SQL queries. Feed the result into two new streams in Kinesis Data Firehose.",
+            "Ingest the data in Amazon Simple Queue Service (SQS). Use Kinesis Data Firehose to query for sales per day for each product and sales per day for each customer with SQL queries. Feed the result into two new streams in Kinesis Data Firehose."
+        ],
+        "correct" : "A",
+        "explanation" : "A. Option A is correct because you want to ingest into Kinesis Data Streams, pass that into Kinesis Data Analytics, and finally feed that data into Kinesis Data Firehose. Option B is incorrect because Data Firehose cannot run SQL queries. Option C is incorrect because Data Streams cannot run SQL queries. Option D is incorrect because Data Analytics cannot run SQL queries against data in SQS."   
+    },
+    {
+        "question" : "You design an application for selling toys online. Every time a customer orders a toy, you want to add an item to the orders table in Amazon DynamoDB and send an email to the customer acknowledging their order. The solution should be performant and cost-effective. How can you trigger this email?",
+        "answers" : [
+            "Use an Amazon Simple Queue Service (SQS) queue.",
+            "Schedule an AWS Lambda function to check for changes to the orders table every minute.",
+            "Schedule a Lambda function to check for changes to the orders table every second.",
+            "Use Amazon DynamoDB Streams."
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct because DynamoDB Streams allows DynamoDB to publish a message every time there is a change in a table. This solution is performant and cost-effective. Option A is incorrect because if you add an item to the orders table in DynamoDB, it does not automatically produce messages in SQS. Options B and C are incorrect because if you check the orders table every minute or every second, it will degrade performance and increase costs."   
+    },
+    {
+        "question" : "A company would like to use Amazon DynamoDB. They want to set up a NoSQL-style trigger. Is this something that can be accomplished? If so, how?",
+        "answers" : [
+            "No. This cannot be done with DynamoDB and NoSQL.",
+            "Yes, but not with AWS Lambda.",
+            "No. DynamoDB is not a supported event source for Lambda.",
+            "Yes. You can use Amazon DynamoDB Streams and poll them with Lambda."
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct. Lambda supports DynamoDB event streams as an event source, which can be polled. You can configure Lambda to poll this stream, look for changes, and create a trigger. Option A is incorrect because this can be accomplished with DynamoDB event streams. Option B is incorrect because this can be accomplished with Lambda. Option C is incorrect because DynamoDB is actually a supported event source for Lambda."   
+    },
+    {
+        "question" : "Which of the following methods does Amazon API Gateway support?",
+        "answers" : [
+            "GET",
+            "POST",
+            "OPTIONS",
+            "All of the above"
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct. API Gateway supports all of the methods listed. GET, POST, PUT, PATCH, DELETE, HEAD, and OPTIONS are all supported methods."   
+    },
+    {
+        "question" : "A company wants to access the infrastructure on which AWS Lambda runs. Is this possible?",
+        "answers" : [
+            "No. Lambda is a managed service and runs the necessary infrastructure on your behalf.",
+            "Yes. They can access the infrastructure and make changes to the underlying OS.",
+            "Yes. They need to open a support ticket.",
+            "Yes, but they need to contact their Solutions Architect to provide access to the environment."
+        ],
+        "correct" : "A",
+        "explanation" : "A. Option A is correct. AWS Lambda uses containers to operate and is a managed service—you cannot access the underlying infrastructure. This is a benefit because your organization does not need to worry about security patching and other system maintenance. Option B is incorrect—you cannot access the infrastructure. Recall that Lambda is serverless. Option C is incorrect. AWS Support cannot provide access to the direct environment. Option D is incorrect—the Solutions Architect cannot provide direct access to the environment."   
+    },
+    {
+        "question" : "Which Amazon services can you use for caching? (Choose two.)",
+        "answers" : [
+            "AWS CloudFormation",
+            "Amazon Simple Storage Service (S3)",
+            "Amazon CloudFront",
+            "Amazon ElastiCache"
+        ],
+        "correct" : ["C", "D"],
+        "explanation" : "C, D. Options C and D are correct because they are both caching tools. Option A is incorrect because CloudFormation is a service that helps you model and set up your AWS resources. Option B is incorrect because you use S3 as a storage tool for the Internet."   
+    },
+    {
+        "question" : "Which Amazon API Gateway feature enables you to create a separate path that can be helpful in creating a development endpoint and a production endpoint?",
+        "answers" : [
+            "Authorizers",
+            "API keys",
+            "Stages",
+            "Cross-origin resource sharing (CORS)"
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is the correct answer. You can use stages to create a separate path with multiple endpoints, such as development and production. Option A is incorrect, as authorizers enable you to control access to your APIs by using Amazon Cognito or an AWS Lambda function. Option B is incorrect because API keys are used to provide customers to your API, which is useful for selling your API. Option D is incorrect, as CORS is used to allow one service to call another service."   
+    },
+    {
+        "question" : "Which authorization mechanisms does Amazon API Gateway support?",
+        "answers" : [
+            "AWS Identity and Access Management (IAM) policies",
+            "AWS Lambda custom authorizers",
+            "Amazon Cognito user pools",
+            "All of the above"
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct. With Amazon API Gateway, you can enable authorization for a particular method with IAM policies, AWS Lambda custom authorizers, and Amazon Cognito user pools. Options A, B, and C are all correct, but option D is the best option because it combines all of them."   
+    },
+    {
+        "question" : "Which tool can you use to develop and test AWS Lambda functions locally?",
+        "answers" : [
+            "AWS Serverless Application Model (SAM)",
+            "AWS SAM CLI",
+            "AWS CloudFormation",
+            "None of the above"
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is the correct answer. AWS SAM CLI allows you to test the Lambda function locally. Option A is incorrect. Though AWS SAM is needed for the YAML/JSON template defining the function, it does not allow for testing the AWS Lambda function locally. Option C is incorrect. CloudFormation is used to deploy resources to the AWS Cloud. Option D is incorrect because AWS SAM CLI is the tool to test Lambda functions locally."   
+    },
+    {
+        "question" : "Which AWS service can you use to store user profile information?",
+        "answers" : [
+            "Amazon CloudFront",
+            "Amazon Cognito",
+            "Amazon Kinesis",
+            "AWS Lambda"
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct. With Cognito, you can create user pools to store user profile information and store attributes such as user name, phone number, address, and so on. Option A is incorrect. CloudFront is a content delivery network (CDN). Option C is incorrect. Amazon Kinesis is a service that you can implement to collect, process, and analyze streaming data in real time. Option D is incorrect. By using AWS Lambda, you can create custom programming functions for compute processing."   
+    },
+    {
+        "question" : "Which of the following cache engines does Amazon ElastiCache support? (Choose two.)",
+        "answers" : [
+            "Redis",
+            "MySQL",
+            "Couchbase",
+            "Memcached"
+        ],
+        "correct" : ["A", "D"],
+        "explanation" : "A, D. Options A and D are correct because Amazon ElastiCache supports both the Redis and Memcached open source caching engines. Option B is incorrect because MySQL is not a caching engine—it is a relational database engine. Option C is incorrect because Couchbase is a NoSQL database and not one of the caching engines that ElastiCache supports."   
+    },
+    {
+        "question" : "Why would an Amazon CloudWatch alarm report as INSUFFICIENT_DATA instead of OK or ALARM? (Choose two.)",
+        "answers" : [
+            "The alarm was just created.",
+            "There is an AWS Identity and Access Management (IAM) permission preventing the metric from receiving data.",
+            "The alarm’s trigger threshold, such as high CPU usage, has not been met.",
+            "The alarm has not reached the requisite number of periods to have data."
+        ],
+        "correct" : ["A", "D"],
+        "explanation" : "A, D. Options A and D are correct. For option A, CloudWatch alarms changes to a state other than INSUFFICIENT_DATA only when the alarm resource has had sufficient time to initialize and collect data, so a just-created alarm may have this state. As option D indicates, some alarms may be configured to need a minimum number of polling periods before an alarm is considered active; alarms in this state would show INSUFFICIENT_DATA. Option B is incorrect because permissions for sending metrics to CloudWatch are the responsibility of the resource sending the data. Option C is incorrect because an otherwise operational alarm in this condition would show status OK."   
+    },
+    {
+        "question" : "You were asked to develop an administrative web application that consumes low throughput and rarely receives high traffic. Which of the following instance type families will be the most optimized choice?",
+        "answers" : [
+            "Memory optimized",
+            "Compute optimized",
+            "General purpose",
+            "Accelerated computing"
+        ],
+        "correct" : "C",
+        "explanation" : "C. The answer is C. General-purpose instances provide a balance of compute, memory, and networking resources. T2 instances are a low-cost option that provides a small amount of CPU resources that can be increased in short bursts when additional cycles are available. They are well suited for lower-throughput applications, such as administrative applications or low-traffic websites. For more details on the instance types, see https://aws.amazon.com/ec2/instance-types."   
+    },
+    {
+        "question" : "Because your applications are showing a consistent steady-state compute usage, you have decided to purchase an AWS Savings Plan to gain significant pricing discounts. Which of the following is not the best purchase option?",
+        "answers" : [
+            "All Up-front",
+            "Partial Up-front",
+            "No Up-front",
+            "Pay-as-you-go"
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct. Pay-as-you-go refers to On-Demand pricing, which does not offer the same cost savings as a Savings Plan. Savings Plans provide significant discounts in exchange for a commitment to consistent usage over a one- or three-year term. Option A is incorrect because the All Up-front payment option offers the largest discount, making it a beneficial choice. Option B is incorrect because the Partial Up-front option still provides a discount with a lower initial payment. Option C is incorrect because the No Up-front option, though offering no initial cost, still provides a discounted hourly rate over the Savings Plan term."   
+    },
+    {
+        "question" : "What is the maximum size of an AWS Lambda deployment package (as a compressed zip or JAR file)?",
+        "answers" : [.
+            "25 MB",
+            "50 MB",
+            "100 MB",
+            "250 MB"
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct. As of this writing, the maximum compressed size of a Lambda package is 50 MB compressed, 250 MB unzipped."   
+    },
+    {
+        "question" : "Your application processes transaction-heavy and IOPS-intensive database workloads, often needing over 20,000 IOPS. You need to choose the right Amazon Elastic Block Store (EBS) volume so that application performance is not affected. Which of the following options would you suggest?",
+        "answers" : [
+            "HDD-backed storage (st1)",
+            "SSD-backed storage (io1)",
+            "Amazon Simple Storage Service (S3) Intelligent Tier class storage",
+            "SSD-backed storage (gp3)"
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct. The performance of the transaction-heavy workloads depends primarily on IOPS; SSD-backed volumes are designed for transactional, IOPS-intensive database workloads, boot volumes, and workloads that require high IOPS. The io1 storage type offers a higher potential IOPS than any of the other options (up to 64,000 IOPS on Nitro-based EC2 instances). Option A is incorrect because a platter-based HDD drive would not meet the performance requirements. Option C is incorrect because S3 is object-based storage, not block. Option D is often a good overall choice for many workloads, but because you need at least 20k IOPS, gp3’s max of 16,000 IOPS is insufficient. For more information, see https://docs.aws.amazon.com/AWSEC2/latest/UserGuide/AmazonEBS.html."   
+    },
+    {
+        "question" : "A legacy financial institution is planning for a huge technical upgrade and planning to go global. The architecture depends heavily on using caching solutions. Which one of the following services does not fit into the caching solutions?",
+        "answers" : [
+            "Amazon ElastiCache for Redis",
+            "Amazon ElastiCache for Memcached",
+            "Amazon DynamoDB Accelerator",
+            "Amazon Elastic Compute Cloud (EC2) memory-optimized"
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D only supplements the setup of your own caching mechanism, and that is not the preferred solution for this scenario. Options A, B, and C help in building a high-speed data storage layer that stores a subset of data. This data is typically transient in nature so that future requests for that data are served up faster than is possible by accessing the data’s primary storage location. For more information, see https://aws.amazon.com/caching/aws-caching."   
+    },
+    {
+        "question" : "Which of the following partition key choices is an inefficient design that leads to poor distribution of the data in an Amazon DynamoDB table?",
+        "answers" : [
+            "User ID, where the application has many users",
+            "Device ID, where each device accesses data at relatively similar intervals",
+            "Status code, where there are only a few possible status codes",
+            "Session ID, where the user session remains distinct"
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct. The status code option suggests an inefficient partition key, because few possible status codes lead to uneven distribution of data and cause request throttling. Options A, B, and D suggest the efficient partition keys because of their distinct nature, which leads to an even distribution of the data. For more information, see https://docs.aws.amazon.com/amazondynamodb/latest/developerguide/bp-partition-key-design.html."   
+    },
+    {
+        "question" : "You are planning to build serverless backends by using AWS Lambda to handle web, mobile, Internet of Things (IoT), and third-party API requests. Which of the following are the main benefits in opting for a serverless architecture in this scenario? (Choose three.)",
+        "answers" : [
+            "No need to manage servers",
+            "No need to ensure application fault tolerance and fleet management",
+            "No charge for idle capacity",
+            "Flexible maintenance schedules",
+            "Powered for high complex processing"
+        ],
+        "correct" : ["A","B","C"],
+        "explanation" : "A, B, C. Options A, B, and C are correct. Using a serverless approach means not having to manage servers and not incurring compute costs when there is no user traffic. This is achieved while still offering instant scale to meet high demand, such as a flash sale on an e-commerce site or a social media mention that drives a sudden wave of traffic. Option D is incorrect because Lambda runs your code on a high-availability compute infrastructure and performs all the administration of the compute resources, including server and operating system maintenance, capacity provisioning and automatic scaling, code and security patch deployment, and code monitoring and logging. Option E is incorrect because you can configure Lambda functions to run up to 15 minutes per execution. As a best practice, set the timeout value based on your expected execution time to prevent your function from running longer than intended."   
+    },
+    {
+        "question" : "A company would like to migrate their existing application to a serverless-based application. They are already using Amazon Simple Storage Service (S3) for their static website, and they have implemented API Gateway and Lambda for their business logic. They would like to be able to set up a serverless database. They are currently running a MySQL database. Which AWS service, which is serverless, could help them?",
+        "answers" : [
+            "Amazon Aurora",
+            "Amazon Neptune",
+            "Amazon DynamoDB",
+            "Amazon ElastiCache"
+        ],
+        "correct" : "A",
+        "explanation" : "A. Option A is correct. Aurora has a serverless option that is compatible with MySQL. Option B is incorrect. Neptune is a graph database that is used for applications that have highly connected graph datasets. Option C is incorrect. Although DynamoDB is serverless, it is also NoSQL-based, which means the application would require some refactoring—possibly extensive. Option D is incorrect, as ElastiCache is meant for caching database queries, not a one-for-one replacement."   
+    },
+    {
+        "question" : "Which AWS service can be used to develop an application sign-in flow automatically, which you can customize if necessary?",
+        "answers" : [
+            "Amazon Simple Storage Service (S3)",
+            "Amazon Cognito",
+            "Amazon Aurora",
+            "AWS Lambda"
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct. Cognito provides a prebuilt sign-up and sign-in UI to speed up your development process. You can further customize this UI as needed. Option A is incorrect. S3 is used for file object storage. Option C is incorrect. Aurora is a SQL database. Option D is incorrect. Lambda is for developing custom functions, not for building UIs."   
+    },
+    {
+        "question" : "A company is migrating their web application to a serverless architecture. They are ready to take their static web files and move them to AWS. Which serverless service allows them to host a website?",
+        "answers" : [
+            "Amazon Simple Storage Service (S3)",
+            "Amazon DynamoDB",
+            "Amazon Elastic Compute Cloud (EC2)",
+            "AWS Elastic Beanstalk"
+        ],
+        "correct" : "A",
+        "explanation" : "A. Option A is correct. You can configure S3 to host a static website. Option B is incorrect. DynamoDB is serverless and does store data, but it cannot host a website. Option C is incorrect. EC2 is a virtual machine service. Option D is incorrect. Elastic Beanstalk deploys EC2 instances."   
+    },
+    {
+        "question" : "What is the minimum amount of memory that you can allocate to an AWS Lambda function?",
+        "answers" : [
+            "6 MB",
+            "32 MB",
+            "64 MB",
+            "128 MB"
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct. As of this writing, the minimum amount of memory is 128 MB."   
+    },
+    {
+        "question" : "What is the maximum size of all the code and dependencies for an AWS Lambda function before compression?",
+        "answers" : [
+            "50 MB",
+            "100 MB",
+            "250 MB",
+            "500 MB"
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct. As of this writing, the maximum size of all code and dependencies for a Lambda function is 250 MB. There is also an additional /tmp directory that is available for each Lambda function, which allows for an additional 10 GB of ephemeral storage space."   
+    },
+    {
+        "question" : "What is the default setting for Amazon Simple Queue Service (SQS) visibility timeout?",
+        "answers" : [
+            "30 seconds",
+            "1 minute",
+            "1 day",
+            "1 week"
+        ],
+        "correct" : "A",
+        "explanation" : "A. Option A is correct as the default setting for SQS visibility timeout is 30 seconds."   
+    },
+    {
+        "question" : "What are the keys that can be used in an Amazon DynamoDB table? (Choose two.)",
+        "answers" : [
+            "Partition key",
+            "Sort key",
+            "Unique key",
+            "Cache key",
+            "Master key"
+        ],
+        "correct" : ["A","B"],
+        "explanation" : "A, B. Options A and B are correct. Partition and sort keys are the two keys you can use inside DynamoDB. Options C, D, and E are incorrect because these are not valid keys inside DynamoDB."   
+    },
+    {
+        "question" : "What feature does Amazon ElastiCache provide?",
+        "answers" : [
+            "A highly available and fast indexing service for querying",
+            "An Amazon Elastic Compute Cloud (EC2) instance with a large amount of memory and CPU",
+            "A managed in-memory caching service",
+            "An Amazon EC2 instance with Redis and Memcached already installed"
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct. ElastiCache is a managed in-memory caching service. Option A is incorrect because the description aligns more closely to Amazon ES. Option B is incorrect because this is not an accurate description of the ElastiCache service. Option D is incorrect because, as a managed service, ElastiCache does not manage EC2 instances."   
+    },
+    {
+        "question" : "Which AWS service can you use to monitor an AWS Lambda function performance?",
+        "answers" : [
+            "Lambda is serverless and therefore you cannot monitor its performance.",
+            "AWS CloudTrail has metrics about the performance of the Lambda function.",
+            "AWS Config stores all configuration details and performance of Lambda functions.",
+            "Amazon CloudWatch monitors the performance of Lambda functions."
+        ],
+        "correct" : "D",
+        "explanation" : "D. Option D is correct. CloudWatch provides metrics for Lambda. Option A is incorrect because you can use CloudWatch to monitor performance. Option B is incorrect because CloudTrail contains security details about calls made to the API. Option C is incorrect because AWS Config stores configuration information about resources in the environment, not performance."   
+    },
+    {
+        "question" : "Which launch type in Amazon ECS allows you to run containers without managing EC2 instances?",
+        "answers" : [
+            "EC2",
+            "On-Premises",
+            "Fargate",
+            "Lambda"
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct. Fargate allows you to run containers without managing any underlying EC2 instances. Option A is incorrect because the EC2 launch type requires self-managing a cluster of EC2 instances. Option B is incorrect because ECS does not support an “On-Premises” launch type. Option D is incorrect because Lambda is not a launch type in ECS."   
+    },
+    {
+        "question" : "AWS Secrets Manager can automatically rotate secrets according to a schedule you define.",
+        "answers" : [
+            "True",
+            "False"
+        ],
+        "correct" : "A",
+        "explanation" : "A. The correct answer is A. Secrets Manager can automatically rotate secrets according to a schedule that you define. This best practice leads to better, more hands-off security by regularly updating secrets without requiring manual intervention."       
+    },
+    {
+        "question" : "What is Amazon Athena primarily used for?",
+        "answers" : [
+            "Performing real-time analytics on streaming data",
+            "Running SQL queries directly on data stored in Amazon S3",
+            "Building machine learning models",
+            "Managing relational databases"
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct. Athena is a service that lets you run queries directly on data stored in S3 using standard ANSI SQL. Option A is incorrect because real-time analytics on streaming data is typically handled by services like Amazon Kinesis. Option C is incorrect because Athena is not used for building machine learning models (see Sagemaker for a service that helps with this). Option D is incorrect because Athena is not a database management service (that’s RDS, Relational Database Service)."   
+    },
+    {
+        "question" : "Which of the following scenarios is most appropriate for using Amazon EFS?",
+        "answers" : [
+            "Running a high-performance computing (HPC) application that requires low-latency storage",
+            "Storing frequently changing website content that needs to be served across multiple EC2 instances",
+            "Storing large, infrequently accessed data sets",
+            "Backing up data from an RDS instance"
+        ],
+        "correct" : "B",
+        "explanation" : "B. The correct answer is B. EFS provides highly scalable storage capacity in an NFS-compatible file system interface, making it ideal for shared network storage across multiple EC2 instances. Option A is incorrect; FSx Lustre would be a good option for low-latency HPC storage. Option C is not ideal for EFS, but it would be a perfect case for S3’s long-term storage tiers like Standard-Infrequent Access or S3 Glacier. Option D is incorrect, because storage for RDS backups is handled by the RDS service itself in the form of snapshots retained by that service."   
+    },
+    {
+        "question" : "What is the primary purpose of AWS AppSync?",
+        "answers" : [
+            "To host static websites",
+            "To deploy and scale container-based applications",
+            "To create and manage GraphQL APIs",
+            "To keep application configuration consistent between servers"
+        ],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct. AWS AppSync is a managed service that allows developers to create and manage GraphQL APIs, an API pattern that allows you to construct queries against a data schema you define. GraphQL is an excellent option for web and mobile backends, especially when paired with DynamoDB storage to create a fully serverless stack. Option A is incorrect; hosting static websites is supported by services like Amazon S3 or AWS Amplify. Option B is incorrect because deploying containers would be a job for Amazon ECS or EKS. Option D sounds correct, given the name, but synchronizing app configuration is not the purpose of AppSync."   
+    },
+    {
+        "question" : "AWS API Gateway only supports REST APIs.",
+        "answers" : [
+            "True",
+            "False"
+        ],
+        "correct" : "B",
+        "explanation" : "B. The correct answer is B (false). Although API Gateway does give developers an easy way to scaffold and implement RESTful APIs, it also supports WebSockets. Moreover, because REST is just a design pattern, and API Gateway allows you to define your own HTTP interface for APIs, it is possible to implement your own design that is not specifically REST-oriented."   
+    },
+    {
+        "question" : "Security groups act as a virtual firewall that controls both inbound and outbound traffic for Amazon EC2 instances.",
+        "answers" : [
+            "True",
+            "False"
+        ],
+        "correct" : "A",
+        "explanation" : "A. The correct answer is A. In AWS, you don’t need traditional firewalls with centralized allow and deny lists; instead, you create security groups, which act as firewalls you can attach directly to resources like RDS databases and EC2 instances. Security groups can allow IP ranges or other security groups, giving you flexibility to create role-based networking permissions between resources."   
+    },
+    {
+        "question" : "What is the primary purpose of an IAM role?",
+        "answers" : [
+            "Associating users with fixed permissions according to their role in the organization",
+            "Applying temporary credentials for accessing AWS services",
+            "Restricting access to S3 buckets",
+            "Managing billing and cost"
+        ],
+        "correct" : "B",
+        "explanation" : "B. Option B is correct. IAM roles provide temporary security credentials for AWS services, allowing applications, services, or users to assume these roles and access resources securely. Option A is incorrect because IAM roles are not about assigning fixed permissions to users; that’s done by IAM policies. Option C is incorrect because although IAM roles can be used to control access to S3 buckets, that is not their primary purpose. Option D is incorrect because IAM roles do not directly manage billing and costs."   
+    },
+    {
+        "question" : "Amazon Aurora is compatible with which two database engines?",
+        "answers" : [
+            "Microsoft SQL Server",
+            "PostgreSQL",
+            "Oracle",
+            "MySQL"
+        ],
+        "correct" : ["B", "D"],
+        "explanation" : "B, D. The correct answers are B and D, PostgreSQL and MySQL. Aurora instances can be launched that are compatible with either of those two engines, but not Oracle or SQL Server."   
+    },
+    {
+        "question" : "What do EC2 instance types govern?",
+        "answers" : [
+            "The operating system of the instance",
+            "Hardware characteristics such as CPU, RAM, and Network",
+            "The underlying architecture of the virtual machine (e.g., x86 vs. ARM)",
+            "Whether the instance uses Spot or On-demand pricing"
+        ],
+        "correct" : "B",
+        "explanation" : "B. The correct answer is B. Instance types determine system-level resources such as CPU and RAM. Option A is incorrect because operating system is a separate choice, determined by the AMI (Amazon Machine Image) you choose as the basis for your instance. Option C is incorrect; CPU architecture is also a separate configuration. Finally, Option D is incorrect, because the choice of Spot vs. On-demand pricing relates to how you purchase the instance, not what instance type you choose."   
+    },
+    {
+        "question" : "Which deployment strategy in Elastic Beanstalk can minimize downtime by deploying new instances alongside the existing ones before switching traffic?",
+        "answers" : [
+            "All at Once",
+            "Rolling",
+            "Canary",
+            "Immutable"
+        ],
+        "correct" : "D",
+        "explanation" : "D. The correct answer is D. The Immutable deployment policy in Elastic Beanstalk creates new instances with the updated configuration or application version in a new Auto Scaling Group, ensuring that traffic is only switched to the new instances once they are deemed healthy, minimizing downtime and reducing the risk of failed deployments. Option A is incorrect because All at Once forces an update on every compute instance simultaneously, which would result in downtime. Option B is incorrect because a Rolling deployment uses your existing compute infrastructure and does not stand up new instances. Option C is incorrect for the same reason. Also, Beanstalk does not have an explicitly named deployment type called Canary, although it does support the concept of deploying new releases to a small test group via its traffic splitting configuration."   
+    },
+    {
+        "question" : "What happens when you stop an EC2 instance? (Choose two.)",
+        "answers" : [
+            "The instance is permanently deleted along with its data.",
+            "Any data on instance storage is deleted.",
+            "The instance is temporarily shut down, but the attached EBS volumes remain intact.",
+            "Attached EBS volumes become unattached."
+        ],
+        "correct" : ["B", "C"],
+        "explanation" : "B, C. Options B and C are correct. Instance storage, one of the fastest storage options you can get on EC2, depends on the underlying hardware. Starting and stopping an EC2 may relocate it to other hardware, so instance store is lost. Option C is also correct; when the instance shuts down, your EBS volumes stick around. Option A is incorrect, because stopped instances can be restarted. Option D is incorrect because EBS volumes stay attached until you explicitly detach them."   
+    },
+    {
+        "question" : [
+            "What service best enables you to store and version container images before deploying them?",
+            "Elastic Compute Cloud (EC2)",
+            "Simple Storage Service (S3)",
+            "Elastic Container Registry (ECR)",
+            "Elastic Container Service (ECS)"
+        ],
+        "answers" : [],
+        "correct" : "C",
+        "explanation" : "C. Option C is correct. ECR lets you create repositories to store and version container images. Option A is incorrect, because EC2 is the virtual machine service in AWS. Option B is incorrect; though S3 can store and even version data, it lacks the integration with container deployment services like ECS that ECR has. Option D is incorrect because ECS is the container orchestration service itself. ECS can pull images directly from ECR for deployment as tasks or services."   
+    }
+]
